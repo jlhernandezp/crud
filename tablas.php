@@ -13,22 +13,20 @@ session_start();
 <html>
     <head>
         <meta charset="UTF-8">
-        <title></title>
+        <title>Listado de tablas</title>
     </head>
     <body>
         <?php
         if (isset($_POST['botonLista'])){
             $_SESSION['baseDeDatos']=filter_input(INPUT_POST,'botonLista');
-            echo $_SESSION['baseDeDatos'];
-            
+
             $baseDeDatos=new BD($_SESSION['servidor'],$_SESSION['usuario'],$_SESSION['clave'],$_SESSION['baseDeDatos']);
             if ($baseDeDatos->conectar() ){
-                $baseDeDatos->verTablas();
-                
+                $baseDeDatos->verTablas(); 
             }else {
                 echo $baseDeDatos->conectar();
             }
-            
+            //$baseDeDatos->desconectar();
         }
         ?>
     </body>
