@@ -82,26 +82,26 @@ class BD {
                 echo "<legend id='tablas'>Registros de la tabla $tabla</legend>";
                // echo "<form name='basesDeDatos' method='post' action='gestionarTabla.php'>";
                 echo "<table>";
-                $sentencia="SHOW COLUMNS FROM $tabla;";
-                $cabeceras= $this->conexion->query($sentencia);
+                $sentenciaCabeceras="SHOW COLUMNS FROM $tabla;";
+                $cabeceras= $this->conexion->query($sentenciaCabeceras);
                 echo "<tr>";
                 while ($row=$cabeceras->fetch_array()){
                     echo "<th>$row[0]</th>" ;
                 }
                 echo "</tr>";
-                $cabeceras->close();
+                $cabeceras->free();
                
                 
                 $sentencia="SELECT * FROM $tabla";
                 $listaDeRegistros= $this->conexion->query($sentencia);
-                 $numeroDeCampos=$listaDeRegistros->field_count;
+                $numeroDeCampos=$listaDeRegistros->field_count;
                 while ($row =$listaDeRegistros->fetch_array()) {
                     echo "<tr>";
                     for ($i=0;$i<$numeroDeCampos;$i++){
-                        echo "<td>$row[$i]</td>";
+                        echo "<td><input type='text' value='$row[$i]' /></td>";
                     }
-                     echo "<td><input type='submit' name='editar$row[$i]' id='botonEditarRegistro' value='Editar'/></td>";
-                     echo "<td><input type='submit' name='borrar$row[$i]' id='botonBorrarRegistro' value='Borrar'/></td></tr></li>";
+                     echo "<td><input type='submit' name='editar' id='botonEditarRegistro' value='Editar'/></td>";
+                     echo "<td><input type='submit' name='borrar' id='botonBorrarRegistro' value='Borrar'/></td></tr>";
                      
                 }
                 echo "</table>";

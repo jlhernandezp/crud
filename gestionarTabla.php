@@ -21,18 +21,23 @@ session_start();
     <body>
         
         <?php
-        if (!isset($_POST['editar'])){
+        if (!isset($_SESSION['tablaElegida'])){
             $_SESSION['tablaElegida']=filter_input(INPUT_POST,'tabla');
+        }
+        if (isset($_POST['borrar'])){
+            echo "borrando";
+        }
+        if (!isset($_POST['editar'])){
+            
+            
             echo "<form name='basesDeDatos' method='post' action='gestionarTabla.php'>";
             $baseDeDatos=new BD($_SESSION['servidor'],$_SESSION['usuario'],$_SESSION['clave'],$_SESSION['baseDeDatos']);
-                if ($baseDeDatos->conectar() ){ // podríamos prescindir de la conexion
-                    $baseDeDatos->verRegistros($_SESSION['tablaElegida']); 
-                }else {
-                    echo $baseDeDatos->conectar();
-                }
-               // $baseDeDatos->desconectar();
+            $baseDeDatos->verRegistros($_SESSION['tablaElegida']); 
+    //        $baseDeDatos->desconectar();
             echo "</form>";
-        } else 
+        } else {
+            print_r($_POST);
+        }
             
          ?>
     </body>
