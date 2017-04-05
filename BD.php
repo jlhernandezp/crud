@@ -85,8 +85,11 @@ class BD {
                 $sentenciaCabeceras="SHOW COLUMNS FROM $tabla;";
                 $cabeceras= $this->conexion->query($sentenciaCabeceras);
                 echo "<tr>";
+                $j=0;
+                
                 while ($row=$cabeceras->fetch_array()){
                     echo "<th>$row[0]</th>" ;
+                    $campo[$j++]=$row[0]; // guardamos los nombre de los campos para editar después
                 }
                 echo "</tr>";
                 $cabeceras->free();
@@ -98,7 +101,7 @@ class BD {
                 while ($row =$listaDeRegistros->fetch_array()) {
                     echo "<tr>";
                     for ($i=0;$i<$numeroDeCampos;$i++){
-                        echo "<td><input type='text' value='$row[$i]' /></td>";
+                        echo "<td><input type='text' name='$campo[$i]' value='$row[$i]' /></td>";
                     }
                      echo "<td><input type='submit' name='editar' id='botonEditarRegistro' value='Editar'/></td>";
                      echo "<td><input type='submit' name='borrar' id='botonBorrarRegistro' value='Borrar'/></td></tr>";
@@ -112,5 +115,16 @@ class BD {
         } else {
             echo $this->conectar();
         }
+    }
+    function borrarRegistro($tabla) {
+        if ($this->conectar()){
+            echo "borrando registro de la tabala $tabla";
+        
+        
+        } else {
+            echo $this->conectar();
+        }
+
+        $this->desconectar();
     }
 }
