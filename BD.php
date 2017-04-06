@@ -28,6 +28,9 @@ class BD {
         $this->clave=$clave;
         
     }
+    /**
+     * Visualiza las tablas en botones.
+     */
     function verTablas(){
         if ($this->conectar()){
           //  $this->conexion= new mysqli($this->servidor, $this->usuario, $this->clave, $this->baseDeDatos);
@@ -49,6 +52,10 @@ class BD {
             echo $this->conectar();
         }
     }
+    /**
+     *  Conecta con la base de datos 
+     * @return boolean true si tiene éxito la conexión un string con el error si no lo es                                 
+     */
     function conectar(){
         
         $myConexion= new mysqli($this->servidor, $this->usuario, $this->clave, $this->baseDeDatos);
@@ -101,7 +108,8 @@ class BD {
                 while ($row =$listaDeRegistros->fetch_array()) {
                     echo "<tr>";
                     for ($i=0;$i<$numeroDeCampos;$i++){
-                        echo "<td><input type='text' name='$campo[$i]' value='$row[$i]' /></td>";
+                        echo "<td><input type='text' name='$campo[$i]' value='$row[$i]' /><input type='hidden' name='nombreDeCampo' value='$campo[0]'/><input type='hidden' name='valorDeCampo' value='$row[0]'/></td>";
+                        // el campo tipo hidden pasa en nombre del campo para posterior uso editando o borrando o...
                     }
                      echo "<td><input type='submit' name='editar' id='botonEditarRegistro' value='Editar'/></td>";
                      echo "<td><input type='submit' name='borrar' id='botonBorrarRegistro' value='Borrar'/></td></tr>";
@@ -116,15 +124,53 @@ class BD {
             echo $this->conectar();
         }
     }
-    function borrarRegistro($tabla) {
+    /**
+     * borra un registro de la tabla elegida,
+     * @param type $tabla tabla de la que borrar el registro
+     * @param type $primaryKey campo en el que buscar el valor
+     * @param type $valor valor que buscamos para eliminar el registro
+     */
+    function borrarRegistro($tabla,$primaryKey,$valor) {
         if ($this->conectar()){
-            echo "borrando registro de la tabala $tabla";
-        
-        
+            //echo "borrando registro de la tabla $tabla $primaryKey / $valor";
+            $sentenciaSQL="DELETE FROM `$tabla` WHERE `$primaryKey`='$valor'";
+            if (!$this->conexion->query($sentenciaSQL)){
+                
+                echo "Falló borrando un registro de la tabla: (" . $this->conexion->errno . ") " . $this->conexion->error;
+            }
         } else {
             echo $this->conectar();
         }
 
         $this->desconectar();
+    }
+    /**
+     * actualiza los valores en la base de datos.
+     * 
+     * @param type $tabla tabla en la que volcar los resultados
+     * @param type $valores array con los valores a cambiar.
+     */
+    function editarRegistro($tabla,$valores){
+        
+        if ($this->conectar()){
+            $keys= array_keys($valores);
+            $values= array_values($valores);
+            
+            $sentenciaSQL="UPGRADE `$tabla` SET ";
+            for ($i=0; $i<($numeroDeCampos-1);$i++){
+                $sentenciaSQL.=" $keys[$i] = $values[$i],  ";
+            }
+            $sentenciaSQL=rtrim($sentenciaSQL, ",");
+            $sentenciaSQL=$sentenciaSQL. " WHERE "; //FALTA EL RESTO DE LA SENTENCIA
+            if (!$this->conexion->query($sentenciaSQL)){
+                
+                echo "Falló la modificación de la tabla: (" . $this->conexion->errno . ") " . $this->conexion->error;
+            }
+        } else {
+            echo $this->conectar();
+        }
+
+        $this->desconectar();
+        
     }
 }

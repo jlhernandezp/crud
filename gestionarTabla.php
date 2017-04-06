@@ -24,10 +24,11 @@ session_start();
         if (!isset($_SESSION['tablaElegida'])){
             $_SESSION['tablaElegida']=filter_input(INPUT_POST,'tabla');
         }
-        if (isset($_POST['borrar'])){
-           
+        if (isset($_POST['borrar'])){ 
+            
             $baseDeDatos=new BD($_SESSION['servidor'],$_SESSION['usuario'],$_SESSION['clave'],$_SESSION['baseDeDatos']);
-            $baseDeDatos->borrarRegistro($_SESSION['tablaElegida']); 
+            $baseDeDatos->borrarRegistro($_SESSION['tablaElegida'],$_POST['nombreDeCampo'],$_POST['valorDeCampo']); 
+        
         }
         if (!isset($_POST['editar'])){
             
@@ -39,10 +40,15 @@ session_start();
             
             echo "</form>";
         } else {
-            print_r($_POST);
-            print_r($_SERVER['SCRIPT_FILENAME']);
+            // Pasamos la tabla y los valores de los campos actuales.
+            $baseDeDatos=new BD($_SESSION['servidor'],$_SESSION['usuario'],$_SESSION['clave'],$_SESSION['baseDeDatos']); 
+            $baseDeDatos->editarRegistro($_SESSION['tablaElegida'],$_POST); 
+            
+           // print_r($_POST);
+           // print_r($_SERVER['SCRIPT_FILENAME']);
         }
             
          ?>
+        
     </body>
 </html>
