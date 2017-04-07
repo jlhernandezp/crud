@@ -18,8 +18,8 @@ session_start();
     <body>
         <?php
         if (isset($_POST['botonLista'])){
-            $_SESSION['baseDeDatos']=filter_input(INPUT_POST,'botonLista');
-
+            $_SESSION['baseDeDatos']=filter_input(INPUT_POST,'botonListaBD');
+        }
             $baseDeDatos=new BD($_SESSION['servidor'],$_SESSION['usuario'],$_SESSION['clave'],$_SESSION['baseDeDatos']);
             if ($baseDeDatos->conectar() ){
                 $baseDeDatos->verTablas(); 
@@ -27,7 +27,7 @@ session_start();
                 echo $baseDeDatos->conectar();
             }
             //$baseDeDatos->desconectar();
-        }
+        
         ?>
     </body>
 </html>

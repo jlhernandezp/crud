@@ -95,7 +95,7 @@ session_start();
                     echo "<lu>";
                     while ($row =$basesDeDatos->fetch_array()) {
 
-                        echo "<li><input type='submit' name='botonLista' id='botonLista' value='$row[0]'/></li>";
+                        echo "<li><input type='submit' name='botonListaBD' id='botonLista' value='$row[0]'/></li>";
                     }
                     echo "</lu>";
                     echo "</fieldset></form></div>";
