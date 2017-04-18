@@ -111,8 +111,10 @@ class BD {
                         echo "<td><input type='text' name='$campo[$i]' value='$row[$i]' /><input type='hidden' name='nombreDeCampo' value='$campo[0]'/><input type='hidden' name='valorDeCampo' value='$row[0]'/></td>";
                         // el campo tipo hidden pasa en nombre del campo para posterior uso editando o borrando o...
                     }
-                     echo "<td><input type='submit' name='editar' id='botonEditarRegistro' value='Editar'/></td>";
-                     echo "<td><input type='submit' name='borrar' id='botonBorrarRegistro' value='Borrar'/></td></tr>";
+       
+                     echo "<td><input type='submit' name='accion' id='botonBorrarRegistro' value='Editar'/></td></tr>";
+                     echo "<td><input type='submit' name='accion' id='botonBorrarRegistro' value='Borrar'/></td></tr>";
+                                   
                      
                 }
                 echo "</table>";
@@ -167,10 +169,53 @@ class BD {
                 echo "Falló la modificación de la tabla: (" . $this->conexion->errno . ") " . $this->conexion->error;
             }
         } else {
-            echo $this->conectar();
+            echo $this->conectar(); // muestra error de conexión
         }
 
         $this->desconectar();
         
+    }
+    function rellenarCampos($tabla ){
+        if ($this->conectar()){
+            //$sentenciaSQL="SHOW COLUMNS FROM $tabla";
+            $sentenciaSQL="SELECT * FROM $tabla";
+            echo $tabla;
+            
+            if ($field=$this->conexion->query($sentenciaSQL)){
+                
+               
+                foreach($field->fetch_fields() as $campo){
+                    echo $campo->name." :<br/>";
+                    echo "<input type='text' name='$campo->name' value='' /><br />";
+                }
+                
+            } else {
+                
+                echo "Falló la modificación de la tabla: (" . $this->conexion->errno . ") " . $this->conexion->error;
+            }
+        } else {
+            echo $this->conectar(); // muestra error de conexión
+        }
+
+        $this->desconectar();
+        
+    }
+    function insertarRegistro($tabla,$valores) {
+        
+        if ($this->conectar()){
+            
+            $sentenciaSQL="INSERT INTO $tabla (";
+            
+            
+            
+            if (!$this->conexion->query($sentenciaSQL)){
+                
+                echo "Falló borrando un registro de la tabla: (" . $this->conexion->errno . ") " . $this->conexion->error;
+            }
+        } else {
+            echo $this->conectar();
+        }
+
+        $this->desconectar();
     }
 }

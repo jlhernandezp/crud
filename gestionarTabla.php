@@ -12,10 +12,18 @@ spl_autoload_register(function ($clase) {
     require_once "$clase.php";}
 );
 session_start();
- if (isset($_POST['cancelar'])){
-            $_SESSION['tablaElegida']=null;
-            header('Location:tablas.php');
-        } 
+ if (isset($_POST['accion'])){
+     
+     switch ($_POST['accion']){
+         case "Cancelar":
+             header('Location:tablas.php');
+             break;
+         case "Insertar":
+             header('Location:insertar.php');
+             break;
+    }
+            
+} 
 ?>
 <html>
     <head>
@@ -26,33 +34,38 @@ session_start();
         
         <?php
        
-     
-            $_SESSION['tablaElegida']=filter_input(INPUT_POST,'tabla');
-    
-            if (isset($_POST['borrar'])){ 
+              
+        $_SESSION['tablaElegida']= (isset($_POST['tabla'])) ? filter_input(INPUT_POST,'tabla') : $_SESSION['tablaElegida'];
+        $_POST['accion']= (isset($_POST['accion'])) ?$_POST['accion']: null;
+        
+        switch ($_POST['accion']){
+            case "Borrar": 
+                echo "Borrando";
                 echo "esta es la tabla de la que vamos a borrar ".$_SESSION['tablaElegida'];
                 $baseDeDatos=new BD($_SESSION['servidor'],$_SESSION['usuario'],$_SESSION['clave'],$_SESSION['baseDeDatos']);
                 $baseDeDatos->borrarRegistro($_SESSION['tablaElegida'],$_POST['nombreDeCampo'],$_POST['valorDeCampo']); 
+                break;
 
-            }
-            if (!isset($_POST['editar'])){
-
-
+            case "Editar":
+                $baseDeDatos=new BD($_SESSION['servidor'],$_SESSION['usuario'],$_SESSION['clave'],$_SESSION['baseDeDatos']); 
+                $baseDeDatos->editarRegistro($_SESSION['tablaElegida'],$_POST); 
+                break;
+        /*    case "Insertar":
+                 $baseDeDatos=new BD($_SESSION['servidor'],$_SESSION['usuario'],$_SESSION['clave'],$_SESSION['baseDeDatos']); 
+                $baseDeDatos->insertarRegistro($_SESSION['tablaElegida'],$_POST); 
+                break;
+         *
+         */
+        }
+                
                 echo "<form name='basesDeDatos' method='post' action='gestionarTabla.php'>";
                 $baseDeDatos=new BD($_SESSION['servidor'],$_SESSION['usuario'],$_SESSION['clave'],$_SESSION['baseDeDatos']);
                 $baseDeDatos->verRegistros($_SESSION['tablaElegida']); 
  
-                echo "<input type='submit' name='insertar' value='Insertar' />";
-                echo "<input type='submit' name='cancelar' value='Cancelar'  />";
+                echo "<input type='submit' name='accion' value='Cancelar'  />";
+                echo "<input type='submit' name='accion' value='Insertar'  />";
                 echo "</form>";
-            } else {
-                // Pasamos la tabla y los valores de los campos actuales.
-                $baseDeDatos=new BD($_SESSION['servidor'],$_SESSION['usuario'],$_SESSION['clave'],$_SESSION['baseDeDatos']); 
-                $baseDeDatos->editarRegistro($_SESSION['tablaElegida'],$_POST); 
-
-               // print_r($_POST);
-               // print_r($_SERVER['SCRIPT_FILENAME']);
-            }
+       
             
          ?>
         
