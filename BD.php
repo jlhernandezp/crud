@@ -9,7 +9,7 @@
 /**
  * Description of BD
  *
- * @author 104 1
+ * @author jl
  */
 class BD {
     var $baseDeDatos;
@@ -163,7 +163,7 @@ class BD {
                 $sentenciaSQL.=" $keys[$i] = $values[$i],  ";
             }
             $sentenciaSQL=rtrim($sentenciaSQL, ",");
-            $sentenciaSQL=$sentenciaSQL. " WHERE "; //FALTA EL RESTO DE LA SENTENCIA
+            $sentenciaSQL=$sentenciaSQL. " WHERE `$keys[0]`=`$values[0]`"; 
             if (!$this->conexion->query($sentenciaSQL)){
                 
                 echo "Falló la modificación de la tabla: (" . $this->conexion->errno . ") " . $this->conexion->error;
@@ -175,6 +175,11 @@ class BD {
         $this->desconectar();
         
     }
+    /**
+     * Crea el contenido de un formulario a partir de los campos de una tabla
+     * 
+     * @param type $tabla 
+     */
     function rellenarCampos($tabla ){
         if ($this->conectar()){
             //$sentenciaSQL="SHOW COLUMNS FROM $tabla";
@@ -200,6 +205,12 @@ class BD {
         $this->desconectar();
         
     }
+    /**
+     * Ejecuta la orden de insertar sobre la base de datos
+     * 
+     * @param type $tabla
+     * @param type $valores array con los campos y valores a insertar.
+     */
     function insertarRegistro($tabla,$valores) {
         
         if ($this->conectar()){
