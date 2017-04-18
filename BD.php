@@ -204,9 +204,30 @@ class BD {
         
         if ($this->conectar()){
             
-            $sentenciaSQL="INSERT INTO $tabla (";
+           
             
-            
+            if ($this->conectar()){
+                $keys= array_keys($valores);
+                $values= array_values($valores);
+                $sentenciaSQL="INSERT INTO $tabla (";
+
+                for ($i=0; $i<($numeroDeCampos-1);$i++){
+                    $sentenciaSQL.=" $keys[$i],  ";
+                }
+                $sentenciaSQL=rtrim($sentenciaSQL, ",");
+                $sentenciaSQL=$sentenciaSQL. "VALUES ( ";
+                for ($i=0;$i<$numeroDeCampos;$i++){
+                    $sentenciaSQL.=$values[$i];
+                }
+                $sentenciaSQL=rtrim($sentenciaSQL, ",");
+                $sentenciaSQL.=")";
+            if (!$this->conexion->query($sentenciaSQL)){
+                
+                echo "Falló la modificación de la tabla: (" . $this->conexion->errno . ") " . $this->conexion->error;
+            }
+        } else {
+            echo $this->conectar(); // muestra error de conexión
+        }
             
             if (!$this->conexion->query($sentenciaSQL)){
                 
