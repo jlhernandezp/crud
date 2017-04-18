@@ -21,7 +21,7 @@ class BD {
     /*
      * Constructor
      */
-    function BD($servidor,$usuario,$clave, $baseDeDatos){
+    function BD($servidor, $usuario, $clave, $baseDeDatos){
         $this->baseDeDatos=$baseDeDatos;
         $this->servidor=$servidor;
         $this->usuario=$usuario;
@@ -43,7 +43,7 @@ class BD {
                 echo "<lu>";
                 while ($row =$listaDeTablas->fetch_array()) {
 
-                    echo "<li><input type='submit' name='tabla' id='listaBoton' value='$row[0]'/></li>";
+                   echo "<li><input type='submit' name='tabla' id='listaBoton' value='$row[0]'/></li>";
                 }
                 echo "</lu>";
                 echo "</fieldset></form></div>";

@@ -17,9 +17,10 @@ session_start();
     </head>
     <body>
         <?php
-        if (isset($_POST['botonLista'])){
+        if (isset($_POST['botonListaBD'])){
             $_SESSION['baseDeDatos']=filter_input(INPUT_POST,'botonListaBD');
         }
+        
             $baseDeDatos=new BD($_SESSION['servidor'],$_SESSION['usuario'],$_SESSION['clave'],$_SESSION['baseDeDatos']);
             if ($baseDeDatos->conectar() ){
                 $baseDeDatos->verTablas(); 

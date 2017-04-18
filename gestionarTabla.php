@@ -13,7 +13,7 @@ spl_autoload_register(function ($clase) {
 );
 session_start();
  if (isset($_POST['cancelar'])){
-            
+            $_SESSION['tablaElegida']=null;
             header('Location:tablas.php');
         } 
 ?>
@@ -26,9 +26,9 @@ session_start();
         
         <?php
        
-            if (!isset($_SESSION['tablaElegida'])){
-                $_SESSION['tablaElegida']=filter_input(INPUT_POST,'tabla');
-            }
+     
+            $_SESSION['tablaElegida']=filter_input(INPUT_POST,'tabla');
+    
             if (isset($_POST['borrar'])){ 
                 echo "esta es la tabla de la que vamos a borrar ".$_SESSION['tablaElegida'];
                 $baseDeDatos=new BD($_SESSION['servidor'],$_SESSION['usuario'],$_SESSION['clave'],$_SESSION['baseDeDatos']);
@@ -41,7 +41,7 @@ session_start();
                 echo "<form name='basesDeDatos' method='post' action='gestionarTabla.php'>";
                 $baseDeDatos=new BD($_SESSION['servidor'],$_SESSION['usuario'],$_SESSION['clave'],$_SESSION['baseDeDatos']);
                 $baseDeDatos->verRegistros($_SESSION['tablaElegida']); 
-        //        $baseDeDatos->desconectar();
+ 
                 echo "<input type='submit' name='insertar' value='Insertar' />";
                 echo "<input type='submit' name='cancelar' value='Cancelar'  />";
                 echo "</form>";
